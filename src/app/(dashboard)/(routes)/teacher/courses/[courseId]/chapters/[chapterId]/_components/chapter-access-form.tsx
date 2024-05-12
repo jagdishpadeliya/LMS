@@ -2,9 +2,11 @@
 import { Editor } from "@/components/editor";
 import { Preview } from "@/components/preview";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
@@ -28,9 +30,9 @@ type ChapterAccessFormProps = {
 };
 
 const formSchema = z.object({
-  description: z.string().min(1),
+  isFree: z.boolean().default(false),
 });
-const ChapterAccessFormForm = ({
+const ChapterAccessForm = ({
   initialData,
   courseId,
   chapterId,
@@ -41,7 +43,7 @@ const ChapterAccessFormForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData.description || undefined,
+      isFree: !!initialData.isFree,
     },
   });
   const { isValid, isSubmitting } = form.formState;
@@ -61,14 +63,14 @@ const ChapterAccessFormForm = ({
   return (
     <div className="mt-6 rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
-        Chapter description
+        Chapter access
         <Button onClick={toggleEdit} variant={"ghost"}>
           {isEditing ? (
             "Cancel"
           ) : (
             <>
               <Pencil className="mr-2 h-4 w-4" />
-              Edit description
+              Edit access
             </>
           )}
         </Button>
@@ -80,10 +82,9 @@ const ChapterAccessFormForm = ({
             !initialData.description && "italic text-slate-500",
           )}
         >
-          {!initialData.description && "No description"}
-          {initialData.description && (
-            <Preview value={initialData.description} />
-          )}
+          {initialData.isFree
+            ? "This chapter is free for preview"
+            : "This chapter is from Paid content"}
         </div>
       )}
       {isEditing && (
@@ -94,12 +95,21 @@ const ChapterAccessFormForm = ({
           >
             <FormField
               control={form.control}
-              name={"description"}
+              name={"isFree"}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <Editor {...field} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormDescription>
+                      Check this form if you want to make this chapter free for
+                      preview
+                    </FormDescription>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -116,4 +126,4 @@ const ChapterAccessFormForm = ({
   );
 };
 
-export default ChapterAccessFormForm;
+export default ChapterAccessForm;
