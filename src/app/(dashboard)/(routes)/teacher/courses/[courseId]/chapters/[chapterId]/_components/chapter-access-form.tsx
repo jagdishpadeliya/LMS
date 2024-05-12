@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Course } from "@prisma/client";
+import { Chapter, Course } from "@prisma/client";
 import axios from "axios";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,17 +21,20 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
-type DescriptionFormProps = {
-  initialData: Course;
+type ChapterAccessFormProps = {
+  initialData: Chapter;
   courseId: string;
+  chapterId: string;
 };
 
 const formSchema = z.object({
-  description: z.string().min(1, {
-    message: "Description is required",
-  }),
+  description: z.string().min(1),
 });
-const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+const ChapterAccessFormForm = ({
+  initialData,
+  courseId,
+  chapterId,
+}: ChapterAccessFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -44,8 +47,11 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   const { isValid, isSubmitting } = form.formState;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
+      await axios.patch(
+        `/api/courses/${courseId}/chapters/${chapterId}`,
+        values,
+      );
+      toast.success("Chapter updated");
       toggleEdit();
       router.refresh();
     } catch (error) {
@@ -55,7 +61,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   return (
     <div className="mt-6 rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
-        Course description
+        Chapter description
         <Button onClick={toggleEdit} variant={"ghost"}>
           {isEditing ? (
             "Cancel"
@@ -110,4 +116,4 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   );
 };
 
-export default DescriptionForm;
+export default ChapterAccessFormForm;
