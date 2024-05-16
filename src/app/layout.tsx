@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { ToasterProvider } from "@/components/providers/toaster-provider";
+import { ConfettiProvider } from "@/components/providers/confetti-provider";
 
 const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -41,6 +42,7 @@ export default function RootLayout({
             </div>
             <TailwindIndicator />
             <ToasterProvider />
+            <ConfettiProvider />
           </ThemeProvider>
         </body>
       </html>

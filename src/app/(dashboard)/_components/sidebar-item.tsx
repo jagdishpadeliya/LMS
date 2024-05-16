@@ -23,7 +23,7 @@ const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
   return (
     <button
       className={cn(
-        "flex flex-row items-center gap-x-2  pl-6 text-sm font-[500] text-slate-500 transition-all hover:bg-slate-300/20 hover:text-slate-600",
+        "relative flex flex-row items-center gap-x-2  pl-6 text-sm font-[500] text-slate-500 transition-all hover:bg-slate-300/20 hover:text-slate-600",
         isActive &&
           "bg-sky-200/20 text-sky-700 hover:bg-sky-200/20 hover:text-sky-700",
       )}
@@ -39,7 +39,7 @@ const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
       {/* fix h-full */}
       <div
         className={cn(
-          "ml-auto h-12 border-2 border-sky-700 opacity-0 transition-all",
+          "absolute bottom-0 right-0 top-0 border-2 border-sky-700 opacity-0 transition-all",
           isActive && "opacity-100",
         )}
       />
