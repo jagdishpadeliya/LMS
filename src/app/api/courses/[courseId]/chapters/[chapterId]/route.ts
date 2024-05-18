@@ -164,7 +164,7 @@ export async function PATCH(
       statusText: "OK",
     });
   } catch (error) {
-    console.log("[COURSES_CHAPTER_ID", error);
+    console.log("[COURSES_CHAPTER_ID", JSON.stringify(error?.error?.messages));
     return NextResponse.json("Internal Error", {
       status: 500,
       statusText: "Internal Server Error",
